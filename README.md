@@ -36,7 +36,7 @@
 
 1. 2회 이상 불참시 강제 퇴장입니다.
 2. 내용을 제대로 준비하지 못한 경우 불참으로 간주합니다.
-2. 책의 모든 부분까지 정리를 마칠때까지 스터디는 유효하다.
+2. 책의 모든 부분까지 정리를 마칠때까지 스터디는 유효합니다.
 
 ## 👥 스터디 멤버
 | 이름 | GitHub |
@@ -45,3 +45,6 @@
 | 이로움 | [@Roum](https://github.com/roum02) |
 | 태운님 | [@gomteng](https://github.com/gomteng) |
 | 조다희 | [@daheejo](https://github.com/daheejo) |
+| 이은아 | [@aeuna](https://github.com/aeuna) |
+
+
