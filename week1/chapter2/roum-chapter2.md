@@ -245,6 +245,44 @@ whatMintColor(MyColors); // ✅
 : typeof, instanceof , 타입 단언을 사용하여 확인할 수 있다.
 typeof 연산자가 반환하는 값은 자바스크립트의 7가지 기본 데이터 타입과 함수, 호스트 객체, Object 객체가 될 수 있다.
 
+typeof는 값에서 쓰일 때와 타입에서 쓰일 때의 역할이 다르다.
+- 값에서 사용된 typeof는 자바스크립트 런타임의 typeof 연산자가 된다.
+
+```
+interface Person {
+    first: string;
+    last: string;
+}
+
+const person: Person = {first: "zig", last: "song" }
+
+const v1 = typeof person // 값은 object
+```
+*** c.f. TypeScript의 타입(Person)은 컴파일 타임에만 존재합니다.
+JavaScript에서 typeof는 런타임 값의 타입을 반환하며, 객체는 항상 "object"로 출력됩니다.
+
+
+- 타입에서 사용된 typeof는 값을 읽고 타입스크립트 타입을 반환한다.
+
+```
+type T1 = typeof person // 타입은 Person
+```
+
+```
+class Developer {
+  name: string;
+  domain: string;
+
+  constructor(name: string, domain: string) {
+    this.name = name;
+    this.domain = domain;
+  }
+}
+
+const d = typeof Developer // 값이 function
+type T = typeof Developer // 타입이 typeof Developer
+```
+
 ### 2.3 원시 타입
 
 - 자바스크립트에서 값은 타입을 가지나, 변수는 별도의 타입을 가지지 않는다. 따라서 자바스크립트의 변수에는 어떤 타입의 값이라도 자유롭게 할당할 수 있다. 
