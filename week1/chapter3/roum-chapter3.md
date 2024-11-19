@@ -3,6 +3,31 @@
 ![alt text](https://velog.velcdn.com/images/bami/post/f3b873f5-f12d-4cec-b885-bd9c84c55ea1/image.png)
 
 
+1) any 타입
+any 타입은 자바스크립트의 사용 방식과 일치하여 자바스크립트에 존재하는 모든 값을 오류 없이 받을 수 있다. 즉, 자바스크립트에서의 기본적인 사용 방식과 같으므로 타입을 명시하지 않은 것과 동일한 효과를 나타낸다.
+
+2) unknown 타입
+: unknown 타입은 any 타입과 유사하게 모든 타입의 값이 할당될 수 있다. 그러나 any를 제외한 다른 타입으로 선언된 변수에 unknown 타입의 값을 할당할 수 없다.
+
+```
+let unknownValue: unknown;
+
+unknownValue = 100; // any 타입과 유사하게 숫자이든
+unknownValue = "hello mobi"; // 문자열이든
+unknownValue = () =>  console.log("this is any type")
+// 함수이든 상관없이 할당 가능하지만
+
+let someValue1: any = unknownValue; // (o) any 타입으로 선언된 변수를 제외한 다른 변수는 모두 할당이 불가
+let someValue2: number = unknownValue; // (x)
+let someValue3: string = unknownValue; // (x)
+
+```
+
+3) void 타입
+: 타입스크립트에서 어떤 값을 반환하지 않는 함수
+
+4) never 타입
+: never 타입은 모든 타입의 하위 타입이다. 즉, never 자신을 제외한 어떤 타입도 never 타입에 할당될 수 없다는 것을 의미한다. any 타입이라 할지라도 never 타입에 할당될 수 없다.
 
 5) Array type
 - 자바스크립트의 Object.prototype.toString.call() 연산자를 사용하여 확인 가능
