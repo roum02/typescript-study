@@ -578,17 +578,14 @@ const createOrder = (data: CreateOrderData) => {
 # 7.4 API 모킹
 
 프론트엔드 개발 시 현실적으로는 프론트엔드 개발이 서버 개발보다 먼저 이루어지거나 서버개발과 동시에 이루어지는 경우가 더 많다.
-
-하지만 프론트엔드 입장에서는 서버 API가 필요한 상황이라면 프론트 엔드 개발을 어떻게 진행할 수 있을까?
-
+하지만 프론트엔드 입장에서는 서버 API가 필요한 상황이라면 프론트엔드 개발을 어떻게 진행할 수 있을까?
 서버가 별도의 가짜 서버를 제공한다고 해도 프론트엔드 개발과정에서 발생할 수 있는 모든 예외 상황을 처리하는 것은 쉽지않다. 이때 사용하는 것이 모킹`mocking`이다.
 
 모킹은 가짜 모듈을 활용하는 것이다. 테스트뿐만 아니라 개발할 때도 모킹을 사용할 수 있다.
 
-## JSON파일 불러오기\*
+## JSON파일 불러오기
 
 간단한 조회만 필요한 경우에는 \*.json 파일을 만들거나 자바스크립트 파일 안에 JSON형식의 정보를 저장하고 익스포트 하는 방식을 사용하면 된다.
-
 이후 get요청에 파일 경로를 삽입해주면 조회 응답으로 원하는 값을 받을 수 있다.
 
 ```tsx
@@ -604,11 +601,12 @@ const SERVICES: Service[] = [
 ];
 ```
 
-이 방법은 별도으이 환경설정 없이 쉽게 구현할 수 있어 프로젝트 초기 단계에서 빠른 목업을 구축해야 할 경우 사용할 수 있다. 하지만 실제 API로 요청하는 것이 아니기 때문에 추후 요청 경로를 변경해야한다.
+이 방법은 별도의 환경설정 없이 쉽게 구현할 수 있어 프로젝트 초기 단계에서 빠른 목업을 구축해야 할 경우 사용할 수 있다. 하지만 실제 API로 요청하는 것이 아니기 때문에 추후 요청 경로를 변경해야한다.
 
 ## NextApiHandeler 활용하기
 
 Next.js를 사용하는 프로젝트의 경우 NextJS에서 제공하는 NextApiHandeler를 활용할 수 있다.
+NextApiHandler는 하나의 파일 안에 하나의 핸들러를 default export로 구현해야 한다.
 
 핸들러를 정의하여 응답하고자 하는 값을 정의하고, 핸들러 안에서 요청에 대한 응답을 정의할 수 있다. 또한 핸들러 함수 내부에서 추가로직을 작성하여 응답 처리 로직을 추가할 수 있다.
 
@@ -640,7 +638,7 @@ export default handler;
 ## API 요청 핸들러에 분기 추가하기
 
 요청 경로를 수정하지 않고 개발에 필요한 경우에만 실제 요청을 보내고 평소에는 목업을 사용하여 개발하고 싶다면 API 요청을 훅 또는 별도의 함수로 선언해준 다음 조건에 따라 목업 함수를 내보내거나 실제 요청 함수를 내보낼 수 있다.
-
+이 방법을 사용하면, 개발이 완료된 이후에도 유지보수할 때 목업 함수을 사용할 수 있다. 다만 모든 API 요청 함수에 if 분기문을 추가해야 하므로 번거롭다.
 ```tsx
 // useMock과 if문을 사용하여 목업데이터를 사용하는 케이스와 실제 서버로 API를 호출하는 분기를 나눔
 const fetchBrands = () => {
@@ -656,9 +654,8 @@ const fetchBrands = () => {
 ## axios-mock-adapter로 모킹하기
 
 서비스 함수에 분기문이 추가되는 것을 바라지 않는다면 라이브러리를 사용하면 된다.
-
 axios-mock-adapters는 `onGet`을 사용하여 HTTP 메서드(GET, POST, PUT, 등) 및 엔드포인트에 대한 요청을 가로채고 `reply`를 통해 해당 요청에 대한 목업 응답을 설정하고 반환한다.
-
+앞선 방법과 다르게, 별도의 mock API 주소가 필요하지 않다.
 ```tsx
 // axios 및 axios-mock-adapter 가져오기
 import axios from 'axios';
@@ -679,7 +676,8 @@ export const fetchBrandListMock = () => {
 };
 ```
 
-axios-mock-adapter를 사용하면 GET뿐만 아니라 POST, PUT, DELETE 등 다른 http 메서드에 대한 목업을 작성할 수 있다. 또한 networkError, timeoutError 등을 메서드로 제공하기 때문에 다음과 같이 임의로 에러를 발생시킬 수도 있다.
+axios-mock-adapter를 사용하면 응답 바디 이외에도 상태 코드, 응답 지연 시간 등을 추가로 설정할 수 있다.
+또한 GET뿐만 아니라 POST, PUT, DELETE 등 다른 http 메서드에 대한 목업을 작성할 수 있다. 또한 networkError, timeoutError 등을 메서드로 제공하기 때문에 다음과 같이 임의로 에러를 발생시킬 수도 있다.
 
 ```tsx
 export const fetchBrandListMock = () => {
@@ -690,7 +688,7 @@ export const fetchBrandListMock = () => {
 ## 목업 사용 여부 제어하기
 
 로컬에서 목업을 사용하고 dev나 운영환경에서는 사용하지 않으려면 플래그를 사용하여 목업을 사용하는 상황을 구분할 수 있다.
-
+프론트엔드와 서버를 독립시킬 수 있고, 혹여 dev 서버에 문제가 생기더라도 로컬에서 진행되는 프론트엔드 개발에는 영향을 주지 않는다.
 ```tsx
 const useMock = process.env.REACT_APP_MOCK === 'true';
 
@@ -713,7 +711,6 @@ const mockFn = ({ status = 200, time = 100, use = true }: MockResult) =>
 ```
 
 또한 플래그에 따라 mockFn을 제어할 수 있는데 매개 변수를 넘겨 특정 mock 함수만 동작하게 하거나 동작하지 않게 할 수 있다.
-
 만약 스크립트 실행 시 구분 짓고자 한다면 package.json에서 관련 스크립트를 추가할 수 있다
 
 ```json
@@ -728,4 +725,8 @@ const mockFn = ({ status = 200, time = 100, use = true }: MockResult) =>
 
 이렇게 자바스크립트 코드의 실행 여부를 제어하지 않고 config 파일을 별도로 구성하거나 프록시를 사용할 수 있다.
 
-axios-mock-adapter는 API를 중간에 가로채는 것으로 실제 API요청을 주고 받지 않는다. 따라서 API 요청의 흐름을 파악하기 위해서는 react-query-devtools 혹은 redux test tool과 같은 도구의 힘을 빌려야한다.
+axios-mock-adapter는 API를 중간에 가로채는 것으로 실제 API 요청을 주고 받지 않는다. 
+따라서 브라우저가 제공하는 개발자 도구의 네트워크 탭에서는 확인하기 어렵다. API 요청의 흐름을 파악하기 위해서는 react-query-devtools 혹은 redux test tool과 같은 도구의 힘을 빌려야 한다.
+
+모킹 방식 이외에도, 서비스워커를 활용하는 라이브러리인 MSW를 도입한 팀도 있다. MSW를 사용하면 모킹 시 개발 환경과 운영 환경을 분리할 수 있으며,
+개발자 도구의 네트워크 탭에서 API 통신을 확인할 수 있다.
