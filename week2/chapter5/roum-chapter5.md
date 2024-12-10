@@ -1,5 +1,18 @@
 # 5장. 타입 활용하기
 
+```typescript
+type inputValueItem = {
+    text: string;
+    isTouched: boolean
+}
+
+type InputValues = {
+    phoen: inputValueItem;
+    email: inputValueItem;
+}
+```
+
+
 ## 5.1 조건부 타입
 
 타입스크립트의 조건부 타입은 자바스크립트의 삼항 연산자와 동일한 형태를 가진다.
